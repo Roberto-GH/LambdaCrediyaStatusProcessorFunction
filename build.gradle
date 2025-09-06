@@ -1,0 +1,19 @@
+plugins {
+  id 'java'
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  implementation 'com.amazonaws:aws-lambda-java-core:1.2.2'
+  implementation 'com.amazonaws:aws-lambda-java-events:3.11.0'
+  implementation 'software.amazon.awssdk:sns:2.20.162'
+    implementation 'software.amazon.awssdk:ses:2.20.162'
+    implementation 'com.google.code.gson:gson:2.10.1'
+    testImplementation 'junit:junit:4.13.2'
+}
+
+sourceCompatibility = 21
+targetCompatibility = 21
