@@ -42,6 +42,7 @@ public class SqsMessageHandler implements RequestHandler<SQSEvent, Void> {
           .builder()
           .destination(destination).message(sesMessage).source(FROM_EMAIL)
           .build();
+        logger.log("SendEmailRequest => " + sendEmailRequest);
         logger.log("Enviando mensaje con SES a: " + toEmail);
         sesClient.sendEmail(sendEmailRequest);
         logger.log("Mensaje " + messageId + " enviado exitosamente con SES.");
