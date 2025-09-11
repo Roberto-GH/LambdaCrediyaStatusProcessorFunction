@@ -1,9 +1,12 @@
 package com.crediya;
 
+import java.util.List;
+
 public class SqsMessageBody {
     private String email;
     private String subject;
     private String message;
+    private List<PaymentPlan> paymentPlan;
 
     public String getEmail() {
         return email;
@@ -28,4 +31,13 @@ public class SqsMessageBody {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    public List<PaymentPlan> getPaymentPlan() {
+        return paymentPlan;
+    }
+
+    public void setPaymentPlan(List<PaymentPlan> paymentPlan) {
+        this.paymentPlan = paymentPlan;
+    }
+
 }
