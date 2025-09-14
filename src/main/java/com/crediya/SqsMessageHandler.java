@@ -30,11 +30,11 @@ public class SqsMessageHandler implements RequestHandler<SQSEvent, Void> {
         logger.log("Procesando Mensaje ID: " + messageId);
         logger.log("Cuerpo del Mensaje: " + messageBody);
         SqsMessageBody bodyObject = gson.fromJson(messageBody, SqsMessageBody.class);
-        String subject = bodyObject.getSubject();
+        Integer status = bodyObject.getStatus();
         String toEmail = bodyObject.getEmail();
         String messageContent = bodyObject.getMessage();
 
-        boolean isApproved = messageContent.toLowerCase().contains("aprobada");
+        boolean isApproved = messageContent.toLowerCase().contains("aprobada") || status == 2;
         Map<String, Object> templateData = new HashMap<>();
         templateData.put("status", isApproved ? "Aprobada" : "Rechazada");
         templateData.put("isApproved", isApproved);
