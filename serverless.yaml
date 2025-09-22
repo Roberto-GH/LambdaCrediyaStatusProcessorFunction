@@ -1,0 +1,45 @@
+service: crediya-status-processor
+
+frameworkVersion: '4'
+
+provider:
+  name: aws
+  runtime: java21 
+  architecture: x86_64
+  region: us-east-1
+  stage: ${opt:stage, 'dev'}
+  memorySize: 512
+  timeout: 30
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - "sqs:ReceiveMessage"
+            - "sqs:DeleteMessage"
+            - "sqs:GetQueueAttributes"
+          Resource: ${ssm:/creadiya/application-api/sqs-notification-queue-arn/${self:provider.stage}}
+        - Effect: "Allow"
+          Action:
+            - "ses:SendEmail"
+            - "ses:SendRawEmail"
+          Resource: "arn:aws:ses:us-east-1:520236304018:identity/roberthdrums@gmail.com"
+        - Effect: "Allow"
+          Action:
+            - "logs:CreateLogGroup"
+            - "logs:CreateLogStream"
+            - "logs:PutLogEvents"
+          Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/creadiya-status-processor-${self:provider.stage}*:*"
+
+functions:
+  statusProcessor:
+    handler: com.crediya.SqsMessageHandler::handleRequest
+    description: 'Procesa actualizaciones de estado y envía notificaciones por correo.'
+    environment:
+      TOPIC_ARN_SNS: arn:aws:sns:us-east-1:520236304018:SNSTopicCrediya
+      FROM_EMAIL: roberthdrums@gmail.com
+    events:
+      - sqs:
+          arn: ${ssm:/creadiya/application-api/sqs-notification-queue-arn/${self:provider.stage}}
+          batchSize: 1
+          enabled: true
