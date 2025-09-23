@@ -1,5 +1,8 @@
 service: crediya-status-processor
 
+package:
+  artifact: build/distributions/LambdaCrediyaStatusProcessorFunction-1.0.0.zip
+
 frameworkVersion: '4'
 
 provider:
@@ -23,7 +26,11 @@ provider:
           Action:
             - "ses:SendEmail"
             - "ses:SendRawEmail"
-          Resource: "arn:aws:ses:us-east-1:520236304018:identity/roberthdrums@gmail.com"
+            - "ses:SendTemplatedEmail"
+          Resource:
+            - "arn:aws:ses:us-east-1:520236304018:identity/roberthdrums@gmail.com"
+            - "arn:aws:ses:us-east-1:520236304018:identity/roberthdrums@yahoo.com"
+            - "arn:aws:ses:us-east-1:520236304018:template/CrediYaStatusTemplate"
         - Effect: "Allow"
           Action:
             - "logs:CreateLogGroup"
